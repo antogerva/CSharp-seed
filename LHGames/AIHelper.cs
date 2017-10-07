@@ -1,69 +1,59 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
-namespace LHGames
+namespace StarterProject.Web.Api
 {
-    public class AiHelper
+    public class AIHelper
     {
-        public AiHelper()
+        public AIHelper() { }
+
+        public static string CreateStealAction(Point position)
         {
-            
-        }
-
-        public string GetText()
-        {
-            return "HELLO COUCOU BITCH";
-        }
-
-        public static string TestDeplacement(GameInfo gameInfo, Tile[,] map)
-        {
-            var currentPos = new Point(gameInfo.Player.Position.X, gameInfo.Player.Position.Y);
-            Point posInTileMap = null;
-            bool leave = false;
-            for (int i = 0; i < map.Length && !leave; i++)
-            {
-                for (int j = 0; j < map.Length; j++)
-                {
-                    if (map[i, j].X == currentPos.X && map[i, j].Y == currentPos.Y)
-                    {
-                        posInTileMap = new Point(i, j);
-                        leave = true;
-                        break;
-                    }
-                }
-            }
-            Point nextPos = new Point(map[posInTileMap.X, posInTileMap.Y].X, map[posInTileMap.X, posInTileMap.Y].Y);
-            if (posInTileMap.X + 1 < map.Length && (TileContent)(map[posInTileMap.X + 1, posInTileMap.Y].C) == TileContent.Empty)
-                nextPos = new Point(map[posInTileMap.X + 1, posInTileMap.Y].X, map[posInTileMap.X + 1, posInTileMap.Y].Y);
-            else if (posInTileMap.X - 1 >= 0 && (TileContent)(map[posInTileMap.X - 1, posInTileMap.Y].C) == TileContent.Empty)
-                nextPos = new Point(map[posInTileMap.X - 1, posInTileMap.Y].X, map[posInTileMap.X - 1, posInTileMap.Y].Y);
-            else if (posInTileMap.Y + 1 < map.Length && (TileContent)(map[posInTileMap.X, posInTileMap.Y + 1].C) == TileContent.Empty)
-                nextPos = new Point(map[posInTileMap.X, posInTileMap.Y + 1].X, map[posInTileMap.X, posInTileMap.Y + 1].Y);
-            else if (posInTileMap.Y - 1 >= 0 && (TileContent)(map[posInTileMap.X, posInTileMap.Y - 1].C) == TileContent.Empty)
-                nextPos = new Point(map[posInTileMap.X, posInTileMap.Y - 1].X, map[posInTileMap.X, posInTileMap.Y - 1].Y);
-
-            return CreateMoveAction(nextPos);
-        }
-
-        public static string CreateStealAction(Point position) {
             return CreateAction("StealAction", position);
         }
 
-        public static string CreateAttackAction(Point position) {
+        public static string CreateAttackAction(Point position)
+        {
             return CreateAction("AttackAction", position);
         }
 
-        public static string CreateCollectAction(Point position) {
+        public static string CreateCollectAction(Point position)
+        {
             return CreateAction("CollectAction", position);
         }
 
 
-        public static string CreateMoveAction(Point newPosition) {
+        public static string CreateMoveAction(Point newPosition)
+        {
             return CreateAction("MoveAction", newPosition);
         }
 
-        private static string CreateAction(string name, Point target) {
-            string action = JsonConvert.SerializeObject(new ActionContent(name, target));
-            return action;
+        public static string CreateUpgradeAction(UpgradeType upgrade)
+        {
+            return JsonConvert.SerializeObject(new ActionContent("UpgradeAction", upgrade) ); ;
+        }
+
+        public static string CreatePurchaseAction(PurchasableItem item)
+        {
+            return JsonConvert.SerializeObject(new ActionContent("PurchaseAction", item) ); ;
+        }
+
+        public static string CreateHealAction()
+        {
+            return JsonConvert.SerializeObject(new ActionContent() { ActionName = "HealAction" }); ;
+        }
+
+        private static string CreateAction(string name, Point target)
+        {
+            return JsonConvert.SerializeObject(new ActionContent(name, target));
         }
 
         public static Tile[,] DeserializeMap(string customSerializedMap)
@@ -83,6 +73,5 @@ namespace LHGames
             }
             return map;
         }
-
     }
 }

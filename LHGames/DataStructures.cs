@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
-namespace LHGames
+namespace StarterProject.Web.Api
 {
     public enum ActionTypes
     {

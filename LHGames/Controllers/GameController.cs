@@ -1,38 +1,25 @@
-﻿using System;
-using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-
-namespace LHGames.Controllers
+﻿namespace StarterProject.Web.Api.Controllers
 {
-    [Route("")]
+    using System;
+    using System.Collections.Generic;
+    using Microsoft.AspNetCore.Mvc;
+    using Newtonsoft.Json;
+
+    [Route("/")]
     public class GameController : Controller
     {
-        AiHelper player = new AiHelper();
+        AIHelper player = new AIHelper();
 
-        //POST 
         [HttpPost]
-        public string Index([FromBody]string map)
+        public string Index([FromForm]string map)
         {
-            Message mapData = JsonConvert.DeserializeObject<Message>(map);
-            GameInfo gameInfo = JsonConvert.DeserializeObject<GameInfo>(mapData.Content);
-            var carte = AiHelper.DeserializeMap(gameInfo.CustomSerializedMap);
+            GameInfo gameInfo = JsonConvert.DeserializeObject<GameInfo>(map);
+            var carte = AIHelper.DeserializeMap(gameInfo.CustomSerializedMap);
             
-            string testDeplacement = AiHelper.TestDeplacement(gameInfo, carte);
-            return testDeplacement;
-        }
+            // INSERT AI CODE HERE.
 
-
-        [HttpGet("")]
-        public string Index()
-        {
-            try
-            {
-                return player.GetText();
-            }
-            catch (Exception e)
-            {
-                return e.ToString();
-            }
+            string action = AIHelper.CreateMoveAction(gameInfo.Player.Position);
+            return action;
         }
     }
 }

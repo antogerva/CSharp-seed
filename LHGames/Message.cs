@@ -1,6 +1,7 @@
 using Newtonsoft.Json;
+using System;
 
-namespace LHGames
+namespace StarterProject.Web.Api
 {
     public enum MessageType
     {
