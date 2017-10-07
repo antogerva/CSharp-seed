@@ -1,0 +1,13 @@
+############################################
+#          DO NOT TOUCH THIS FILE          #
+############################################
+
+version: 0.2
+
+phases:
+  build:
+    commands:
+      - docker build -t $docker_image$ .
+  post_build:
+    commands:
+      - docker push $docker_image$
