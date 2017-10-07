@@ -1,4 +1,4 @@
-FROM microsoft/dotnet:2-sdk as dotnet-build
+FROM microsoft/dotnet:2-sdk
 WORKDIR /dotnet/LHGames
 
 COPY . .
